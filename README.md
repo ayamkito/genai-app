@@ -14,7 +14,7 @@ To clone this repository, run:
 git clone https://github.com/ayamkito/genai-app.git
 ```
 
-### Initializing the Modules
+### Initializing the Modules in project
 
 After cloning the repository, install the required dependencies by running:
 
