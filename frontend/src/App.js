@@ -52,8 +52,11 @@ function App() {
           <thead>
             <tr>
               <th>Input</th>
+              <th>ID</th>
               <th>Property</th>
-              <th>Value</th>
+              <th>Operator</th>
+              <th>Selector</th>
+              <th>Selector Description</th>
             </tr>
           </thead>
           <tbody>
@@ -62,6 +65,9 @@ function App() {
                 <td>{value[0]}</td>
                 <td>{value[1]}</td>
                 <td>{value[2]}</td>
+                <td>{value[3]}</td>
+                <td>{value[4]}</td>
+                <td>{value[5]}</td>
               </tr>
             ))}
           </tbody>

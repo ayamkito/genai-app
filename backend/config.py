@@ -1,8 +1,89 @@
-property_list = {
- "Is On Registry":"This property determines whether a record or contact is present and active in any of the specified registries.   Returns: 1, 2, or null. This property does not consider external data. If run in external data mode, this property immediately quits with null.  1 if the record is present and active in any of the specified registries;  2 if the record is absent or inactive in all of the specified registries;  Null if the Registry ID and Registry Grouper parameters are missing or invalid, or if this property is invoked directly or indirectly from the inclusion rule for the specified registries.",
- "Is On Health Maintenance Modifier": "This property checks whether a patient is on at least one of the given Health Maintenance Modifiers. It returns 1 if the patient is on at least one of the given Health Maintenance Modifiers. It returns 2 if the patient is not on any of the given Health Maintenance Modifiers.",
-  "Was Problem Active in Problem List During Dates": "This property compares diagnosis records in the given grouper record against patient's problem list. Only diagnoses that were active during the period specified by the search period filter rule are considered. Returns: 1 if any one of the diagnoses in patient's problem list match the parameters; 2 otherwise.",
-  "Last Encounter Date for Diagnosis": "This property compares diagnosis records in the given grouper against a patient's encounter diagnoses. Only active diagnoses and encounters satisfying all the indicated criteria are considered. This property returns the date of the latest encounter satisfying all the conditions, if any. If no encounter matches, the result is null. Voided surgery cases and deleted anesthesia cases are always excluded. An encounter is eliminated by an exclusion criterion if it satisfies the criterion. It is eliminated by an inclusion criterion if the encounter does not satisfy it. Omitted parameters do not exclude any encounters. For example, an encounter is excluded by the 'Department Grouper to Exclude / Include' parameter if the parameter is non-null and the encounter department is / is not a member of the grouper. Returns: Encounter Date of the most recent qualifying encounter with a diagnosis matching the grouper, if any; null otherwise. Required Configuration: Diagnosis Grouper ID. Note: Setting the 'Compare Diagnosis Code as of Encounter Date?' parameter to 'Yes' can negatively impact performance.",
-  "Last Invoice Date For Diagnosis": "This property compares diagnosis records in the given grouper against a patient's invoice diagnoses on invoices with a status of 'Accepted' or 'Closed'. This property returns the date of the latest invoice satisfying all the conditions. If no invoice matches, the result is null. Returns: Most recent 'Accepted' or 'Closed' invoice date with a diagnosis matching the grouper, if any; null otherwise.",
-  "Always One": "This property always returns a value of one. This can be useful if you wish for a conditional to always be true."
-}
+property_list = [
+    {
+        "name": "Is on Registry",
+        "id": 82001,
+        "parameters": {"Registry ID": "", "Registry Grouper": ""},
+        "selector": {
+            "1": "Present and active in any of the specified registries",
+            "2": "Absent or inactive in all of the specified registries",
+            "null": "Missing/invalid parameters or called from inclusion rule"
+        },
+        "database": "Generic Patient Database (EPT)",
+        "function": "$$IsOnRegistry^BIMPATDATA()",
+        "data_type": "Category - YES AND NO (I ECT 100)",
+        "description": "Determines whether a record/contact is present and active in any of the specified registries."
+    },
+    {
+        "name": "Is On Health Maintenance Modifier",
+        "id": 82264,
+        "parameters": {"HM modifiers": ""},
+        "selector": {
+            "1": "Patient is on at least one given HM modifier",
+            "2": "Patient is not on any of the given HM modifiers"
+        },
+        "data_type": "String",
+        "description": "Checks whether a patient is on at least one of the given Health Maintenance Modifiers."
+    },
+    {
+        "name": "Was Problem Active in Problem List During Dates",
+        "id": 82013,
+        "parameters": {
+            "Grouper ID": "", "Look Back Period": "", "Start Date": "", "Search Period Filter Rule": ""
+        },
+        "selector": {
+            "1": "Match found in patient's active problem list during specified period",
+            "2": "No match found"
+        },
+        "database": "Generic Patient Database (EPT)",
+        "function": "$$WasInProblemList^BIMDXDATA()",
+        "data_type": "Category - YES AND NO (I ECT 100)",
+        "description": "Checks for matching diagnoses in the problem list active during a specific date range."
+    },
+    {
+        "name": "Last Encounter Date for Diagnosis",
+        "id": 82274,
+        "parameters": {
+            "Diagnosis Grouper ID": "", "Encounter Types to Include": "", "Encounter Types to Exclude": "",
+            "Appointment Statuses to Include": "", "Appointment Statuses to Exclude": "",
+            "Department Grouper to Include": "", "Department Grouper to Exclude": "",
+            "Look Back Period": "", "Start Date": "", "Encounter Rule Filter": "",
+            "Compare Diagnosis Code as of Encounter Date?": "", "Search Period Filter Rule": "",
+            "Primary Diagnosis Only?": "", "Days Back to Consider Unterminated Encounters as Ongoing": "",
+            "Unterminated Encounter Default Length": ""
+        },
+        "selector": {
+            "value": "Most recent qualifying encounter date, or null if none match"
+        },
+        "database": "Generic Patient Database (EPT)",
+        "function": "$$GetEncDate^BIMDXDATA()",
+        "data_type": "Date",
+        "description": "Returns the latest encounter date that matches diagnosis and encounter criteria."
+    },
+    {
+        "name": "Last Invoice Date For Diagnosis",
+        "id": 82029,
+        "parameters": {
+            "Allowed Diagnoses": "", "Payor": "", "Plan": "", "Procedure Category": "",
+            "Minimum Number Of Matches": "", "Look Back Period": "", "Start Date": "",
+            "Encounter Contact Filter": "", "Use Invoice ICD Code": "", "Search Period Filter Rule": ""
+        },
+        "selector": {
+            "value": "Most recent accepted/closed invoice date matching criteria, or null if none"
+        },
+        "database": "Generic Patient Database (EPT)",
+        "function": "$$GetInvDXDate^BIMDXDATA()",
+        "data_type": "Date",
+        "description": "Returns date of latest invoice with a matching diagnosis, if any."
+    },
+    {
+        "name": "Always One",
+        "id": 75000,
+        "parameters": {},
+        "selector": {
+            "1": "Always returns 1"
+        },
+        "function": "1",
+        "data_type": "Numeric",
+        "description": "Always returns 1; used to force conditionals to always evaluate as true."
+    }
+]
