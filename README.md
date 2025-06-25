@@ -14,11 +14,12 @@ To clone this repository, run:
 git clone https://github.com/ayamkito/genai-app.git
 ```
 
-### Initializing the Modules in project
+### Initializing the Modules in Project
 
-After cloning the repository, install the required dependencies by running:
+After cloning the repository, install the required dependencies by running the following command in the `frontend` folder:
 
 ```bash
+cd frontend
 npm install
 ```
 
@@ -91,7 +92,7 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
    ```
 3. Start the backend server:
    ```bash
-   npm start
+   python app.py
    ```
    The backend will run on [http://localhost:5000](http://localhost:5000) by default.
 
