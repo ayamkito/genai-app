@@ -102,7 +102,11 @@ You don't have to ever use `eject`. The curated feature set is suitable for smal
    ```bash
    cd frontend
    ```
-2. Start the frontend application:
+2. Install the required dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the frontend application:
    ```bash
    npm start
    ```
